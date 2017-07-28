@@ -6,15 +6,17 @@ const webpack = require('webpack'),
 const srcPath  = path.join(__dirname, '/src')/*,
 	distPath = path.join(__dirname, '/app')*/;
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-/*	watch: true,
+	watch: true,
 	watchOptions: {
 		aggregateTimeout: 500
-	},*/
+	},
 	cache: true,
-	devtool: '#cheap-source-map',
+	devtool: 'cheap-module-eval-source-map',
 	context: srcPath,
-	entry: './index.js',
+	entry: './js',
 	output: {
 		filename: 'bundle.js',
 		path: path.resolve(__dirname, 'app')
@@ -24,12 +26,8 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.NoEmitOnErrorsPlugin(),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: true,
-				drop_console: false,
-				unsafe: true
-			}
+		new HtmlWebpackPlugin({
+			template: './index.html'
 		})
 	],
 	module: {
@@ -40,7 +38,6 @@ module.exports = {
 				loader: "babel-loader",
 				options: {
 					presets: "es2015",
-					/*plugins: ["transform-remove-strict-mode"]*/
 				}
 			},
 			{
@@ -61,6 +58,7 @@ module.exports = {
 		]
 	},
 	devServer: {
-		contentBase: __dirname + "/src"
+		contentBase: './app',
+		port: 9000
 	},
 };
