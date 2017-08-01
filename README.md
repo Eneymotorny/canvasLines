@@ -19,7 +19,7 @@ For server start use
 
 For bundle the project use on command line:
 <ul>
-  <li>For development build and watching to the changes in project:
+  <li>For development build and watching the changes in project:
     <pre>npm run dev</pre>
   </li>
   <li>For production build:

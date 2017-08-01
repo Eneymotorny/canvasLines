@@ -1,0 +1,21 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	background-color: #1c1d1c;
+}
+body{
+	width: 80%;
+	margin: auto;
+	padding: 15px;
+	min-height: 100vh;
+	color: #cdcdcd;
+	background-color: #303030;
+	h1 {
+		text-align: center;
+	}
+	canvas {
+		background-color: aliceblue;
+	}
+}
