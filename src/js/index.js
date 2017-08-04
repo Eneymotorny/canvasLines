@@ -61,13 +61,13 @@ class CanvasLine {
 		ctx.lineWidth = this.panelTool.getWidth();
 		ctx.strokeStyle = this.panelTool.getColor();
 		ctx.lineCap = 'round';
+		ctx.lineJoin = 'round';
 
 		if (tool === 'pencil') {
 			this.elem.on('mousedown.draw', function (e) {
 				drawing = true;
 				ctx.beginPath();
 				ctx.moveTo(e.offsetX, e.offsetY);
-				ctx.stroke();
 			});
 			this.elem.on('mousemove.draw', function (e) {
 				if (drawing) {
