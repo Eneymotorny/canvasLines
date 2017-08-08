@@ -31,9 +31,12 @@ body {
 			display: inline-block;
 			margin-left: 5px;
 			margin-right: 20px;
-			&:nth-last-child(-n+2) {
+			&:nth-last-child(-n+3) {
 				float: right;
 				margin-right: 0;
+			}
+			&[type=number] {
+				width: 40px;
 			}
 		}
 		.jscolor {

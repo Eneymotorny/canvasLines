@@ -10,16 +10,21 @@ class CanvasLine {
 		this.canvas = this.elem[0];
 		this.ctx = this.canvas.getContext('2d');
 		this.panelTool = new PanelTool(this);
-		this.history = [];
+		this.history = {
+			stack: [],
+			step: 0
+		};
 
 		this.draw('pencil');
 		this.addCursor()
 	}
 	draw(tool) {
 		this.elem.off('.draw');
+		$(document).off('.save');
 		let
 			drawing = false,
 			commands = [],
+			elem = this.elem,
 			history = this.history,
 			panelTool = this.panelTool,
 			ctx = this.ctx;
@@ -30,8 +35,13 @@ class CanvasLine {
 		ctx.lineJoin = 'round';
 
 		function pushCommands() {
+			if ( commands.length !== 0 && (history.step < history.stack.length) ) {
+				history.stack.length = history.step;
+				console.log('bpvtyt')
+			}
 			if ( commands.length > 0 )  {
-				history.push(commands.slice());
+				history.stack.push(commands.slice());
+				++ history.step;
 				commands.length = 0;
 			}
 		}
@@ -73,7 +83,6 @@ class CanvasLine {
 				ctx.closePath();
 				drawing = false;
 				commands.push( stopDrawHist(e.offsetX, e.offsetY, ctx.lineWidth, ctx.strokeStyle) );
-				pushCommands()
 			}
 		}
 		function stopDrawHist(x, y) {
@@ -109,7 +118,7 @@ class CanvasLine {
 			this.elem.on('mousedown.draw', (e) => startDraw(e));
 			this.elem.on('mousemove.draw', (e) => draw(e));
 			this.elem.on('mouseup.draw',   (e) => stopDraw(e));
-			$('body').on('mouseup.draw',   (e) => pushCommands());
+			$(document).on('mouseup.save',   () => pushCommands());
 			this.elem.on('mouseout.draw',  (e) => mouseOut(e));
 			this.elem.on('mouseover.draw', (e) => mouseOver(e));
 		} else
@@ -184,19 +193,29 @@ class CanvasLine {
 			pozitCursor(e);
 		});
 	}
-	clearCanvas(){
+	clearCanvas() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 	}
+	clearAll() {
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.history.stack.length = 0;
+		this.history.step = 0;
+	}
 	undo() {
-
+		if (this.history.step) {
+			this.restore( -- this.history.step)
+		}
 	}
 	redo() {
-
+		if (this.history.step < this.history.stack.length) {
+			this.restore( ++ this.history.step)
+		}
 	}
-	restore () {
-		for( let i = 0; i < this.history.length; i++) {
-			for( let j = 0; j < this.history[i].length; j++) {
-				this.history[i][j]()
+	restore( step = this.history.stack.length ) {
+		this.clearCanvas();
+		for( let i = 0; i < step; i++) {
+			for( let j = 0; j < this.history.stack[i].length; j++) {
+				this.history.stack[i][j]()
 			}
 		}
 	}
@@ -226,17 +245,14 @@ class PanelTool {
 		$('<span>').text('Width').insertBefore(this.inpWidth);
 
 //		$('<button>History</button>').appendTo($tools).on('click', () => console.dir(canvas.history) );
+//		$('<button>Restore</button>').appendTo($tools).on('click', () => canvas.restore() );
 
-		$('<button>Restore</button>').appendTo($tools)
-			.on('click', () => canvas.restore() );
 		$('<button>Clear</button>').appendTo($tools)
-				.on('click', () => canvas.clearCanvas() );
-/*
+			.on('click', () => canvas.clearAll() );
 		$('<button>↷</button>').appendTo($tools)
 			.on('click', () => canvas.redo() );
 		$('<button>↶</button>').appendTo($tools)
 			.on('click', () => canvas.undo() );
-*/
 
 		$tools.children().on('change', () => this.refresh() );
 	}
