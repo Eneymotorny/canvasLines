@@ -31,7 +31,7 @@ body {
 			display: inline-block;
 			margin-left: 5px;
 			margin-right: 20px;
-			&:last-child {
+			&:nth-last-child(-n+2) {
 				float: right;
 				margin-right: 0;
 			}
