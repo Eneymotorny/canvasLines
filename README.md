@@ -2,9 +2,10 @@
 
 Application with Canvas. Simplest image editor with the following features:
 <ul>
-  <li>Select line width (expected);</li> 
-  <li>Select line color (expected);</li>
-  <li>Clear Canvas (expected).</li>
+  <li>Select line width;</li> 
+  <li>Select line color;</li>
+  <li>Clear Canvas.</li>
+  <li>Undo/redo steps</li>
 </ul>
 Additional information:
 <ul>

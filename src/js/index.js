@@ -241,7 +241,7 @@ class PanelTool {
 		$('<span>').text('Color').insertBefore(this.colrpcr);
 
 		this.inpWidth =
-			$('<input type="number" min="1" max="70" value="6">').appendTo($tools);
+			$('<input type="number" min="1" max="90" value="6">').appendTo($tools);
 		$('<span>').text('Width').insertBefore(this.inpWidth);
 
 //		$('<button>History</button>').appendTo($tools).on('click', () => console.dir(canvas.history) );
@@ -256,11 +256,18 @@ class PanelTool {
 
 		$tools.children().on('change', () => this.refresh() );
 	}
-	refresh() { this.canvas.draw('pencil') }
+	refresh() {
+		if (this.inpWidth.val() > 90) {
+			this.inpWidth.val(90);
+		} else if (this.inpWidth.val() < 1){
+			this.inpWidth.val(1)
+		}
+		this.canvas.draw('pencil');
+	}
 	getColor () { return this.colrpcr.val() };
 	getWidth () { return this.inpWidth.val() };
 	plusWidth () {
-		if (this.inpWidth.val() < 70 )
+		if (this.inpWidth.val() < 90 )
 		this.inpWidth.val( +this.inpWidth.val() + 1 );
 		this.refresh()
 	};
